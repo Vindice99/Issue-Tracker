@@ -11,7 +11,9 @@ import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import {zodResolver} from "@hookform/resolvers/zod";
 import { schema } from "../../validationSchema";
-import z from "zod";
+import z, { set } from "zod";
+import ErrorMessage from "@/app/components/ErrorMessage";
+import Spinner from "@/app/components/Spinner";
 // Dynamically import SimpleMDE to avoid SSR issues
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -26,6 +28,7 @@ const NewIssuePage = () => {
     resolver: zodResolver(schema), //  Zod resolver for validation
   });
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   return (
     <div className="max-w-xl">
@@ -44,9 +47,11 @@ const NewIssuePage = () => {
         className="max-w-xl "
         onSubmit={handleSubmit(async (data) => {
           try {
+            setIsSubmitting(true);
             await axios.post("/api/issue", data);
             router.push("/issues");
           } catch (error) {
+            setIsSubmitting(false);
             setError("Failed to create issue. Please try again.");
           }
         })}
@@ -63,7 +68,7 @@ const NewIssuePage = () => {
                 </IconButton>
               </TextField.Slot>
             </TextField.Root>
-            {errors.title && <Text color="red" size="2">{errors.title.message} </Text>}
+            { <ErrorMessage>{errors.title?.message}</ErrorMessage>}
           </Box>
           <Box maxWidth="500px">
             <Controller
@@ -73,10 +78,10 @@ const NewIssuePage = () => {
                 <SimpleMDE placeholder="Issue Description" {...field} />
               )}
             />
-             {errors.description && <Text color="red" size="2">{errors.description.message}</Text>}
+             {<ErrorMessage>{errors.description?.message}</ErrorMessage>}
           </Box>
           <Box maxWidth="200px">
-            <Button type="submit">Create Issue</Button>
+            <Button type="submit" >Create Issue {isSubmitting && <Spinner />}</Button>
           </Box>
         </Flex>
       </form>
