@@ -30,6 +30,17 @@ const NewIssuePage = () => {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const onSubmit = handleSubmit(async (data) => {
+          try {
+            setIsSubmitting(true);
+            await axios.post("/api/issue", data);
+            router.push("/issues");
+          } catch (error) {
+            setIsSubmitting(false);
+            setError("Failed to create issue. Please try again.");
+          }
+        })
+
   return (
     <div className="max-w-xl">
       {error && (
@@ -45,16 +56,7 @@ const NewIssuePage = () => {
       )}
       <form
         className="max-w-xl "
-        onSubmit={handleSubmit(async (data) => {
-          try {
-            setIsSubmitting(true);
-            await axios.post("/api/issue", data);
-            router.push("/issues");
-          } catch (error) {
-            setIsSubmitting(false);
-            setError("Failed to create issue. Please try again.");
-          }
-        })}
+        onSubmit={onSubmit}
       >
         <Flex direction="column" gap="5" maxWidth="600px">
           <Box maxWidth="500px">
