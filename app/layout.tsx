@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-       <Theme accentColor="violet" radius="large" appearance="dark">
+       <Theme accentColor="violet" radius="large" appearance="light">
           <Navbar />
           <main className="p-6">{children}</main>
           {/* <ThemePanel /> */}
