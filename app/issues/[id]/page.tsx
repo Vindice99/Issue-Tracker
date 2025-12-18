@@ -3,6 +3,7 @@ import prisma from '@/prisma/client'
 import { Box, Card, Flex, Heading, Text } from '@radix-ui/themes'
 import { notFound } from 'next/navigation'
 import React from 'react'
+import ReactMarkdown from 'react-markdown'
 
 interface IssueDetailPageProps {
     params: {
@@ -40,11 +41,11 @@ const detailIssue = await prisma.issue.findUnique({
       </div>
 
       {/* Issue Description */}
-      <Card className='p-6'>
+      <Card className='p-6 prose'>
         <Heading size="4" mb="3">Description</Heading>
-        <Text as="p" className='whitespace-pre-wrap leading-relaxed text-gray-700'>
+        <ReactMarkdown className='whitespace-pre-wrap leading-relaxed text-gray-700'>
           {detailIssue.description}
-        </Text>
+        </ReactMarkdown>
       </Card>
 
       {/* Issue Metadata */}

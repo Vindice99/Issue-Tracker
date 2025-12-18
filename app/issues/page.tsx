@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "@radix-ui/themes";
-import Link from "next/link";
+import Link from "../components/Link";
 import prisma from "@/prisma/client";
 import { Table } from "@radix-ui/themes";
 import StatusBadge from "@/app/components/StatusBadge";
@@ -23,7 +23,7 @@ const IssuePage = async () => {
           </Table.Row>
         </Table.Header>
         <Table.Body>
-          {issues.map(issue =>(
+          {issues.map((issue: typeof issues[number]) =>(
             <Table.Row key={issue.id}>
               <Table.Cell>
                 <Link href={`/issues/${issue.id}`}>
