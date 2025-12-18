@@ -5,10 +5,13 @@ import React from 'react'
 import { AiFillBug } from 'react-icons/ai'
 import classnames from 'classnames'
 import { Button } from '@radix-ui/themes'
+import { ThemeToggle } from './components'
+
 
 const Navbar = () => {
     const currentPathname = usePathname()
     console.log(currentPathname)
+
 
     const links = [
         { label: "Dashboard", href: "/dashboard" },
@@ -34,11 +37,12 @@ const Navbar = () => {
             {/* Right side items */}
             <div className='flex items-center space-x-4'>
                 <Link href="/login">
-                    <Button variant="ghost">Login</Button>
+                    <Button >Login</Button>
                 </Link>
                 <Link href="/signup">
                     <Button>Sign Up</Button>
                 </Link>
+                 <ThemeToggle />       
             </div>
 
         </nav>

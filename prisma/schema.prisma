@@ -21,6 +21,19 @@ model Issue {
   updateAt DateTime @updatedAt
 }
 
+model User {
+  id Int @id @default(autoincrement())
+  email String @unique
+  password String
+  role Role @default(USER)
+  createdAt DateTime @default(now())
+  updateAt DateTime @updatedAt
+}
+enum Role {
+  USER
+  ADMIN
+}
+
 enum IssueStatus {
   OPEN
   IN_PROGRESS

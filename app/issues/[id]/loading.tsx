@@ -1,6 +1,7 @@
 import { Box, Card, Flex, Heading, Skeleton } from '@radix-ui/themes'
 import React from 'react'
 
+
 const loading = () => {
   return (
     <div className='max-w-4xl mx-auto px-4 py-6'>
