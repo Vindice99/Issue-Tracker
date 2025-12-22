@@ -12,6 +12,7 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { schema } from "../../validationSchema";
+import { Issue } from "@prisma/client";
 // Dynamically import SimpleMDE to avoid SSR issues
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -20,7 +21,7 @@ const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
 // Infer the form data type from the Zod schema
 type IssueFormData = z.infer<typeof schema>;
 
-const IssueForm = () => {
+const IssueForm = ({issue} : {issue?: Issue}) => {
   const router = useRouter();
   const { register, control, handleSubmit, formState : {errors}} = useForm<IssueFormData>({
     resolver: zodResolver(schema), //  Zod resolver for validation
@@ -58,7 +59,7 @@ const IssueForm = () => {
       >
         <Flex direction="column" gap="5" maxWidth="600px">
           <Box maxWidth="500px">
-            <TextField.Root placeholder="Issue Title" {...register("title")} className="mb-2">
+            <TextField.Root defaultValue={issue?.title} placeholder="Issue Title" {...register("title")} className="mb-2">
               <TextField.Slot>
                 <MagnifyingGlassIcon height="30" width="16" />
               </TextField.Slot>
@@ -74,6 +75,7 @@ const IssueForm = () => {
             <Controller
               name="description"
               control={control}
+              defaultValue={issue?.description || ""}
               render={({ field }) => (
                 <SimpleMDE placeholder="Issue Description" {...field} />
               )}

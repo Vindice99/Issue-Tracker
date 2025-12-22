@@ -1,5 +1,7 @@
 import React from 'react'
 import IssueForm from '../../_components/IssueForm'
+import prisma from '@/prisma/client'
+import { notFound } from 'next/navigation'
 
 
 interface EditIssuePageProps {  
@@ -11,9 +13,18 @@ interface EditIssuePageProps {
 
 
 
-const EditIssuePage = ({ params }: EditIssuePageProps) => {
+const EditIssuePage = async ({ params : {id} }: EditIssuePageProps) => {
+
+  const IssueNeedToEdit = await prisma.issue.findUnique({
+    where: {
+      id: parseInt(id)
+    }
+  })
+
+  if(!IssueNeedToEdit) { notFound() }
+
   return (
-    <IssueForm />
+    <IssueForm issue={IssueNeedToEdit} />
   )
 }
 
