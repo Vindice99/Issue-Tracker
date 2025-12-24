@@ -6,11 +6,16 @@ import {AddIssueButton, Link} from "@/app/components";
 
 const IssuePage = async () => {
   //fetch issues and display them here (omitted for brevity)
-  const issues = await prisma.issue.findMany();
+  const issues = await prisma.issue.findMany({
+    orderBy: { id: 'asc' }
+  });
 
   return (
     <div>
-      <AddIssueButton />
+      <div className="mb-8">
+        <AddIssueButton children="Create New Issue" />
+        <AddIssueButton children="Sort Order" />
+      </div>
       <Table.Root variant="surface">
         <Table.Header>
           <Table.Row>

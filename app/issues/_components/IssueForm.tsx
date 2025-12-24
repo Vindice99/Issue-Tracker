@@ -21,29 +21,36 @@ const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
 // Infer the form data type from the Zod schema
 type IssueFormData = z.infer<typeof schema>;
 
-const IssueForm = ({issue} : {issue?: Issue}) => {
+const IssueForm = ({ issue }: { issue?: Issue }) => {
   const router = useRouter();
-  const { register, control, handleSubmit, formState : {errors}} = useForm<IssueFormData>({
+  const { register, control, handleSubmit, formState: { errors } } = useForm<IssueFormData>({
     resolver: zodResolver(schema), //  Zod resolver for validation
   });
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onSubmit = handleSubmit(async (data) => {
-          try {
-            setIsSubmitting(true);
-            await axios.post("/api/issue", data);
-            router.push("/issues");
-          } catch (error) {
-            setIsSubmitting(false);
-            setError("Failed to create issue. Please try again.");
-          }
-        })
+    try {
+      setIsSubmitting(true);
+      if (issue) {
+        await axios.patch(`/api/issue/${issue.id}`, data);
+        router.push("/issues");
+        return;
+      }
+      else {
+        await axios.post("/api/issue", data);
+        router.push("/issues");
+      }
+    } catch (error) {
+      setIsSubmitting(false);
+      setError("Failed to create issue. Please try again.");
+    }
+  })
 
   return (
     <div className="max-w-xl">
       {error && (
-        <Callout.Root  className="mb-4 w-125">
+        <Callout.Root className="mb-4 w-125">
           <Callout.Icon>
             <InfoCircledIcon />
           </Callout.Icon>
@@ -69,7 +76,7 @@ const IssueForm = ({issue} : {issue?: Issue}) => {
                 </IconButton>
               </TextField.Slot>
             </TextField.Root>
-            { <ErrorMessage>{errors.title?.message}</ErrorMessage>}
+            {<ErrorMessage>{errors.title?.message}</ErrorMessage>}
           </Box>
           <Box maxWidth="500px">
             <Controller
@@ -80,10 +87,10 @@ const IssueForm = ({issue} : {issue?: Issue}) => {
                 <SimpleMDE placeholder="Issue Description" {...field} />
               )}
             />
-             {<ErrorMessage>{errors.description?.message}</ErrorMessage>}
+            {<ErrorMessage>{errors.description?.message}</ErrorMessage>}
           </Box>
           <Box maxWidth="200px">
-            <Button type="submit" >Create Issue {isSubmitting && <Spinner />}</Button>
+            <Button type="submit" > {issue ? "Update issue" : "Create Issue"}{isSubmitting && <Spinner />}</Button>
           </Box>
         </Flex>
       </form>

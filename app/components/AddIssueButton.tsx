@@ -1,12 +1,18 @@
 import { Button } from '@radix-ui/themes'
 import Link from 'next/link'
-import React from 'react'
+import { ReactNode } from 'react'
 
-const AddIssueButton = () => {
+const AddIssueButton = ({ children }: { children: ReactNode }) => {
   return (
-       <div className="mb-5">
-            <Button><Link href="/issues/new">Create New Issue</Link></Button>
-     </div>
+    <Button 
+      size="2"
+      variant="solid"
+      className="mb-4 mr-6 cursor-pointer hover:opacity-90 transition-opacity "
+    >
+      <Link href="/issues/new" className="no-underline">
+        {children}
+      </Link>
+    </Button>
   )
 }
 
