@@ -32,8 +32,16 @@ const IssueForm = ({issue} : {issue?: Issue}) => {
   const onSubmit = handleSubmit(async (data) => {
           try {
             setIsSubmitting(true);
+            if(issue){
+               await axios.patch(`/api/issue/${issue.id}`, data);
+              return;
+            }
+            else{
             await axios.post("/api/issue", data);
             router.push("/issues");
+            // Refresh the issues list after creating a new issue
+            router.refresh();
+            }
           } catch (error) {
             setIsSubmitting(false);
             setError("Failed to create issue. Please try again.");
@@ -83,7 +91,7 @@ const IssueForm = ({issue} : {issue?: Issue}) => {
              {<ErrorMessage>{errors.description?.message}</ErrorMessage>}
           </Box>
           <Box maxWidth="200px">
-            <Button type="submit" >Create Issue {isSubmitting && <Spinner />}</Button>
+            <Button type="submit" >{issue ? "Update Issue" : "Create Issue"} {isSubmitting && <Spinner />}</Button>
           </Box>
         </Flex>
       </form>

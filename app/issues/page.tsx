@@ -4,9 +4,12 @@ import { Table } from "@radix-ui/themes";
 import {AddIssueButton, Link} from "@/app/components";
 
 
+
 const IssuePage = async () => {
   //fetch issues and display them here (omitted for brevity)
-  const issues = await prisma.issue.findMany();
+  const issues = await prisma.issue.findMany({
+    orderBy: { id : "asc" }
+  });
 
   return (
     <div>
@@ -37,5 +40,6 @@ const IssuePage = async () => {
     </div>
   );
 };
+export const dynamic = 'force-dynamic';
 
 export default IssuePage;

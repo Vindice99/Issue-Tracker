@@ -1,8 +1,11 @@
 import prisma from '@/prisma/client'
-import { Box, Grid } from '@radix-ui/themes'
+import { Box, Flex, Grid } from '@radix-ui/themes'
 import { notFound } from 'next/navigation'
 import EditIssueButton from './EditIssueButton'
 import IssueDetail from './IssueDetail'
+import Dropdown from '@/app/components/Dropdown'
+import { DropdownMenu } from '@radix-ui/themes'
+import Link from 'next/link'
 
 interface IssueDetailPageProps {
   params: {
@@ -26,7 +29,19 @@ const IssueDetailPage = async ({ params: { id } }: IssueDetailPageProps) => {
         <IssueDetail detailIssue={detailIssue} />
       </Box>
       <Box>
-        <EditIssueButton id={detailIssue.id} />
+        <Flex direction="column" gap="4">
+          <EditIssueButton id={detailIssue.id} />
+          <Dropdown>
+            <DropdownMenu.Item>
+              <Link href={`/issues/${detailIssue.id}/edit`}>Edit Issue</Link>
+            </DropdownMenu.Item>
+            <DropdownMenu.Separator />
+            <DropdownMenu.Item>Assign to User</DropdownMenu.Item>
+            <DropdownMenu.Item>Change Status</DropdownMenu.Item>
+            <DropdownMenu.Separator />
+            <DropdownMenu.Item color="red">Delete Issue</DropdownMenu.Item>
+          </Dropdown>
+        </Flex>
       </Box>
     </Grid>
   )
