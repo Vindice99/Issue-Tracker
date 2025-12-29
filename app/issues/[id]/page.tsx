@@ -6,6 +6,7 @@ import IssueDetail from './IssueDetail'
 import Dropdown from '@/app/components/Dropdown'
 import { DropdownMenu } from '@radix-ui/themes'
 import Link from 'next/link'
+import DeleteButton from '../_components/DeleteButton'
 
 interface IssueDetailPageProps {
   params: {
@@ -31,12 +32,13 @@ const IssueDetailPage = async ({ params: { id } }: IssueDetailPageProps) => {
       <Box>
         <Flex direction="column" gap="4">
           <EditIssueButton id={detailIssue.id} />
+          <DeleteButton id={detailIssue.id} />
           <Dropdown>
             <DropdownMenu.Item>
-              <Link href={`/issues/${detailIssue.id}/edit`}>Edit Issue</Link>
+              <Link href={`/issues/${detailIssue.id}/edit`}>Assign to User</Link>
             </DropdownMenu.Item>
             <DropdownMenu.Separator />
-            <DropdownMenu.Item>Assign to User</DropdownMenu.Item>
+            <DropdownMenu.Item>Change Severity</DropdownMenu.Item>
             <DropdownMenu.Item>Change Status</DropdownMenu.Item>
             <DropdownMenu.Separator />
             <DropdownMenu.Item color="red">Delete Issue</DropdownMenu.Item>

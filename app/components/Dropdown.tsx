@@ -18,3 +18,5 @@ const Dropdown = ({ children, triggerLabel = 'Options' }: {
     </DropdownMenu.Root>
   );
 };
+
+export default Dropdown;

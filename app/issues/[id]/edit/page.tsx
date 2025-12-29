@@ -10,9 +10,6 @@ interface EditIssuePageProps {
     id: string
    }
 }
-
-
-
 const EditIssuePage = async ({ params : {id} }: EditIssuePageProps) => {
 
   const IssueNeedToEdit = await prisma.issue.findUnique({

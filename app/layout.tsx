@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "./navbar";
-import { Theme, ThemePanel} from "@radix-ui/themes";
+import { Container, Theme, ThemePanel } from "@radix-ui/themes";
 import { ThemeProvider } from "./components/ThemeProvider";
 
 const geistSans = Geist({
@@ -31,7 +31,11 @@ export default function RootLayout({
         <ThemeProvider attribute="class" defaultTheme="light" enableSystem>
           <Theme accentColor="violet" radius="large">
             <Navbar />
-            <main className="p-6">{children}</main>
+            <main className="p-6">
+              <Container>
+                {children}  
+              </Container>
+            </main>
             {/* <ThemePanel /> */}
           </Theme>
         </ThemeProvider>
