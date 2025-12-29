@@ -2,21 +2,17 @@
 import ErrorMessage from "@/app/components/ErrorMessage";
 import Spinner from "@/app/components/Spinner";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Issue } from "@prisma/client";
 import { DotsHorizontalIcon, InfoCircledIcon, MagnifyingGlassIcon } from "@radix-ui/react-icons";
 import { Box, Button, Callout, Flex, IconButton, TextField } from "@radix-ui/themes";
 import axios from "axios";
 import "easymde/dist/easymde.min.css";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import SimpleMDE from "react-simplemde-editor";
 import z from "zod";
 import { schema } from "../../validationSchema";
-import { Issue } from "@prisma/client";
-// Dynamically import SimpleMDE to avoid SSR issues
-const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
-  ssr: false,
-});
 
 // Infer the form data type from the Zod schema
 type IssueFormData = z.infer<typeof schema>;
