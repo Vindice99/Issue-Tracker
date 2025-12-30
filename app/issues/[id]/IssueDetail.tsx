@@ -28,7 +28,7 @@ const IssueDetail = ({ detailIssue }: { detailIssue: any }) => {
             {detailIssue.description}
           </ReactMarkdown>
         </Card>
-        <Flex gap="6" wrap="wrap">
+        <Flex gap="6" wrap="wrap" mt="4">
           <div>
             <Text size="1" weight="bold" className='text-gray-500 uppercase'>Issue ID</Text>
             <Text size="2" className='block mt-1'>#{detailIssue.id}</Text>

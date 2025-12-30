@@ -1,6 +1,6 @@
 import StatusBadge from "@/app/components/StatusBadge";
 import prisma from "@/prisma/client";
-import { Table } from "@radix-ui/themes";
+import { Container, Table } from "@radix-ui/themes";
 import {AddIssueButton, Link} from "@/app/components";
 
 
@@ -12,7 +12,7 @@ const IssuePage = async () => {
   });
 
   return (
-    <div>
+    <Container className="p-6">
       <AddIssueButton />
       <Table.Root variant="surface">
         <Table.Header>
@@ -37,7 +37,7 @@ const IssuePage = async () => {
           ))}
         </Table.Body>
       </Table.Root>
-    </div>
+    </Container>
   );
 };
 export const dynamic = 'force-dynamic';
