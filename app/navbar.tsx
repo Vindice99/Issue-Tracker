@@ -6,6 +6,7 @@ import { AiFillBug } from 'react-icons/ai'
 import classnames from 'classnames'
 import { Button } from '@radix-ui/themes'
 import { ThemeToggle } from './components'
+import { signIn } from "next-auth/react"
 
 
 const Navbar = () => {
@@ -37,7 +38,7 @@ const Navbar = () => {
             {/* Right side items */}
             <div className='flex items-center space-x-4'>
                 <Link href="/login">
-                    <Button >Login</Button>
+                    <Button onClick={() => signIn("google")} >Login</Button>
                 </Link>
                 <Link href="/signup">
                     <Button>Sign Up</Button>
