@@ -2,11 +2,16 @@
 import * as AlertDialog from '@radix-ui/react-alert-dialog';
 import { TrashIcon } from '@radix-ui/react-icons'
 import { Button } from '@radix-ui/themes'
+import { useRouter } from "next/navigation";
 import axios from 'axios';
+import { useState } from 'react';
 
 
 const DeleteButton = ({ id }: { id: number }) => {
+    const router = useRouter();
+    const [error,setError] = useState(false);
     return (
+        <>
         <AlertDialog.Root>
             <AlertDialog.Trigger asChild>
                 <Button
@@ -46,8 +51,13 @@ const DeleteButton = ({ id }: { id: number }) => {
                             hover:bg-red-600 focus-visible:outline-2 
                             focus-visible:outline-red-400 select-none"
                             onClick = {async () => {
-                                await axios.delete(`/api/issue/${id}`)
-                                router.push('/issues')
+                                try {
+                                    await axios.delete(`/api/issue/${id}`)
+                                    router.push('/issues')
+                                    router.refresh()
+                                } catch (error) {
+                                    
+                                }
                             }}
                             >
                                 Yes, Delete
@@ -57,6 +67,12 @@ const DeleteButton = ({ id }: { id: number }) => {
                 </AlertDialog.Content>
             </AlertDialog.Portal>
         </AlertDialog.Root>
+         <AlertDialog.Root>
+            <AlertDialog.AlertDialogContent>
+                <AlertDialog.AlertDialogTitle>Error</AlertDialog.AlertDialogTitle>
+            </AlertDialog.AlertDialogContent>
+        </AlertDialog.Root>    
+        </>
     )
 }
 export default DeleteButton
