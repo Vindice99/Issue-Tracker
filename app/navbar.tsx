@@ -1,53 +1,124 @@
-'use client'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import React from 'react'
-import { AiFillBug } from 'react-icons/ai'
-import classnames from 'classnames'
-import { Button } from '@radix-ui/themes'
-import { ThemeToggle } from './components'
-import { signIn } from "next-auth/react"
-
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import React from "react";
+import { AiFillBug } from "react-icons/ai";
+import classnames from "classnames";
+import {
+  Avatar,
+  Button,
+  Container,
+  DropdownMenu,
+  Spinner,
+  Text,
+} from "@radix-ui/themes";
+import { Skeleton, ThemeToggle } from "./components";
+import { signIn, signOut, useSession } from "next-auth/react";
+import Dropdown from "./components/Dropdown";
+import { stat } from "fs";
 
 const Navbar = () => {
-    const currentPathname = usePathname()
-    console.log(currentPathname)
 
+  return (
+    <nav className="flex justify-between items-center mb-5 border-b px-5 h-14">
+      <Container>
+        {/* Left side items */}
+        <div className="flex space-x-6 items-center">
+          <Link href="/">
+            <AiFillBug />
+          </Link>
+          <NavLink />
+        </div>
 
-    const links = [
-        { label: "Dashboard", href: "/dashboard" },
-        { label: "Issue", href: "/issues" },
-    ]
+        {/* Right side items */}
+      </Container>
+      <AuthStatus/>
+    </nav>
+  );
+};
+
+const NavLink = () => {
+  const currentPathname = usePathname();
+  console.log(currentPathname);
+
+  const links = [
+    { label: "Dashboard", href: "/dashboard" },
+    { label: "Issue", href: "/issues" },
+  ];
+  return (
+    <ul className="flex hover:cursor-pointer">
+      {links.map((link) => (
+        <li key={link.href}>
+          <Link
+            href={link.href}
+            className={classnames({
+              "nav-link": true,
+              "text-zinc-900 font-bold": link.href === currentPathname,
+            })}
+          >
+            {link.label}
+          </Link>
+        </li>
+      ))}
+    </ul>
+  );
+};
+
+const AuthStatus = () => {
+  const { status, data: session } = useSession();
+
+  if (status === "loading") {
     return (
-        <nav className='flex justify-between items-center mb-5 border-b px-5 h-14'>
-            <div className='flex space-x-6 items-center'>
-                <Link href="/"><AiFillBug /></Link>
-                <ul className='flex hover:cursor-pointer'>
-                    {links.map(link =>
-                    (<Link href={link.href} key={link.href}
-                        className={classnames({
-                            'text-zinc-900 font-bold': link.href === currentPathname,
-                            'text-zinc-500': link.href !== currentPathname,
-                            'hover:text-zinc-800 px-6 h-14 transition-colors flex items-center hover:bg-gray-300': true
-                        })}>
-                        {link.label}
-                    </Link>))}
-                </ul>
-            </div>
+      <div>
+        <Button>
+          <Spinner></Spinner>
+        </Button>
+      </div>
+    );
+  }
 
-            {/* Right side items */}
-            <div className='flex items-center space-x-4'>
-                <Link href="/login">
-                    <Button onClick={() => signIn("google")} >Login</Button>
-                </Link>
-                <Link href="/signup">
-                    <Button>Sign Up</Button>
-                </Link>
-                 <ThemeToggle />       
-            </div>
+  if (status === "unauthenticated") {
+    return (
+      <Skeleton width = "3rem"/>
+    );
+  }
 
-        </nav>
-    )
-}
+  return (
+    <div className="flex items-center space-x-4">
+      {status === "authenticated" && (
+        <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <Avatar
+              src={session!.user!.image!}
+              fallback="?"
+              size="2"
+              radius="full"
+              className="cursor-pointer"
+              referrerPolicy="no-referrer"
+            />
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content>
+            <DropdownMenu.Label>
+              <Text size="2">{session.user!.email}</Text>
+            </DropdownMenu.Label>
+            <DropdownMenu.Separator />
+            <DropdownMenu.Item>
+              <Button onClick={() => signOut()}>Log out</Button>
+            </DropdownMenu.Item>
+            <DropdownMenu.Item>
+              <Link href="/profile">
+                <Button>Profile</Button>
+              </Link>
+            </DropdownMenu.Item>
+          </DropdownMenu.Content>
+        </DropdownMenu.Root>
+      )}
+      <Link href="/signup">
+        <Button>Sign Up</Button>
+      </Link>
+      <ThemeToggle />
+    </div>
+  );
+};
 
-export default Navbar
+export default Navbar;
