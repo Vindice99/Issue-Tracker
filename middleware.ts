@@ -7,12 +7,12 @@ export default auth((req) => {
   const { nextUrl } = req
   const isAuthenticated = !!req.auth
 
-  // Protect issue detail routes
-  if (nextUrl.pathname.startsWith('/issues/') && !isAuthenticated) {
+  // Protect only edit and new issue routes
+  if ((nextUrl.pathname.startsWith('/issues/new') || nextUrl.pathname.includes('/edit')) && !isAuthenticated) {
     return Response.redirect(new URL('/api/auth/signin', nextUrl))
   }
 })
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)','/issues/:path*'],
+  matcher: ['/issues/new','/issues/:id/edit'],
 }
