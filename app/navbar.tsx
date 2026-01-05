@@ -21,7 +21,6 @@ const Navbar = () => {
 
   return (
     <nav className="flex justify-between items-center mb-5 border-b px-5 h-14">
-      <Container>
         {/* Left side items */}
         <div className="flex space-x-6 items-center">
           <Link href="/">
@@ -31,7 +30,7 @@ const Navbar = () => {
         </div>
 
         {/* Right side items */}
-      </Container>
+     
       <AuthStatus/>
     </nav>
   );
@@ -70,16 +69,18 @@ const AuthStatus = () => {
   if (status === "loading") {
     return (
       <div>
-        <Button>
-          <Spinner></Spinner>
-        </Button>
+        <Skeleton/>
       </div>
     );
   }
 
   if (status === "unauthenticated") {
     return (
-      <Skeleton width = "3rem"/>
+      <div className="flex gap-3">
+        <Button onClick={() => signIn()}>Log in</Button>  
+        <Button>Sign Up</Button>
+      </div>
+     
     );
   }
 
@@ -113,9 +114,6 @@ const AuthStatus = () => {
           </DropdownMenu.Content>
         </DropdownMenu.Root>
       )}
-      <Link href="/signup">
-        <Button>Sign Up</Button>
-      </Link>
       <ThemeToggle />
     </div>
   );

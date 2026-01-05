@@ -4,9 +4,15 @@ import { auth } from "@/auth"
 export const runtime = 'nodejs'
 
 export default auth((req) => {
-  // Middleware logic here if needed
+  const { nextUrl } = req
+  const isAuthenticated = !!req.auth
+
+  // Protect issue detail routes
+  if (nextUrl.pathname.startsWith('/issues/') && !isAuthenticated) {
+    return Response.redirect(new URL('/api/auth/signin', nextUrl))
+  }
 })
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)','/issues/:path*'],
 }
