@@ -20,7 +20,7 @@ import { stat } from "fs";
 const Navbar = () => {
 
   return (
-    <nav className="flex justify-between items-center mb-5 border-b px-5 h-14">
+    <nav className="flex justify-between items-center border-b px-5 h-14 w-full max-w-full overflow-hidden">
         {/* Left side items */}
         <div className="flex space-x-6 items-center">
           <Link href="/">
@@ -33,7 +33,7 @@ const Navbar = () => {
      
       <AuthStatus/>
     </nav>
-  );
+  );  
 };
 
 const NavLink = () => {
@@ -79,6 +79,7 @@ const AuthStatus = () => {
       <div className="flex gap-3">
         <Button onClick={() => signIn()}>Log in</Button>  
         <Button>Sign Up</Button>
+         <ThemeToggle />
       </div>
      
     );

@@ -7,6 +7,8 @@ import Dropdown from '@/app/components/Dropdown'
 import { DropdownMenu } from '@radix-ui/themes'
 import Link from 'next/link'
 import DeleteButton from '../_components/DeleteButton'
+import { auth } from '@/auth'
+import AsigneeSelect from './AsigneeSelect'
 
 interface IssueDetailPageProps {
   params: {
@@ -15,6 +17,7 @@ interface IssueDetailPageProps {
 }
 
 const IssueDetailPage = async ({ params: { id } }: IssueDetailPageProps) => {
+  const session = await auth()
   const detailIssue = await prisma.issue.findUnique({
     where: {
       id: parseInt(id)
@@ -29,22 +32,25 @@ const IssueDetailPage = async ({ params: { id } }: IssueDetailPageProps) => {
       <Box className='md:col-span-4'>
         <IssueDetail detailIssue={detailIssue} />
       </Box>
-      <Box>
-        <Flex direction="column" gap="4">
-          <EditIssueButton id={detailIssue.id} />
-          <DeleteButton id={detailIssue.id} />
-          <Dropdown>
-            <DropdownMenu.Item>
-              <Link href={`/issues/${detailIssue.id}/edit`}>Assign to User</Link>
-            </DropdownMenu.Item>
-            <DropdownMenu.Separator />
-            <DropdownMenu.Item>Change Severity</DropdownMenu.Item>
-            <DropdownMenu.Item>Change Status</DropdownMenu.Item>
-            <DropdownMenu.Separator />
-            <DropdownMenu.Item color="red">Delete Issue</DropdownMenu.Item>
-          </Dropdown>
-        </Flex>
-      </Box>
+      {session && (
+        <Box>
+          <Flex direction="column" gap="4">
+            <AsigneeSelect />
+            <EditIssueButton id={detailIssue.id} />
+            <DeleteButton id={detailIssue.id} />
+            <Dropdown>
+              <DropdownMenu.Item>
+                <Link href={`/issues/${detailIssue.id}/edit`}>Assign to User</Link>
+              </DropdownMenu.Item>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Item>Change Severity</DropdownMenu.Item>
+              <DropdownMenu.Item>Change Status</DropdownMenu.Item>
+              <DropdownMenu.Separator />
+              <DropdownMenu.Item color="red">Delete Issue</DropdownMenu.Item>
+            </Dropdown>
+          </Flex>
+        </Box>
+      )}
     </Grid>
   )
 }

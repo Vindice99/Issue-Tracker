@@ -23,8 +23,8 @@ const IssueDetail = ({ detailIssue }: { detailIssue: any }) => {
         </Flex>
         {/* Issue Description */}
         <Card className='p-6 prose mt-6 max-w-full border-1'>
-          <Heading size="4" mb="3">Description</Heading>
-          <ReactMarkdown className='whitespace-pre-wrap leading-relaxed text-gray-700 w-full'>
+          <Heading size="4" mb="3" className='dark:text-white'>Description</Heading>
+          <ReactMarkdown className='whitespace-pre-wrap leading-relaxed text-gray-700 dark:text-white w-full'>
             {detailIssue.description}
           </ReactMarkdown>
         </Card>
