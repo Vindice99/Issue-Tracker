@@ -3,7 +3,7 @@ import prisma from '@/prisma/client'
 import { notFound } from 'next/navigation'
 import dynamic  from 'next/dynamic'
 // Dynamically import IssueForm to disable SSR
-const IssueForm = dynamic(() => import('../../_components/IssueForm'), { ssr: false })
+const IssueForm = dynamic(() => import('../../_components/IssueForm'),)
 
 interface EditIssuePageProps {  
    //use params to get the id from the url

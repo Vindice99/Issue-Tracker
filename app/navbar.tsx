@@ -20,7 +20,7 @@ import { stat } from "fs";
 const Navbar = () => {
 
   return (
-    <nav className="flex justify-between items-center border-b px-5 h-14 w-full max-w-full overflow-hidden">
+    <nav className="flex justify-between items-center border-b px-5 h-14 w-full max-w-full overflow-hidden ">
         {/* Left side items */}
         <div className="flex space-x-6 items-center">
           <Link href="/">
@@ -45,14 +45,15 @@ const NavLink = () => {
     { label: "Issue", href: "/issues" },
   ];
   return (
-    <ul className="flex hover:cursor-pointer">
+    <ul className="flex hover:cursor-pointer ">
       {links.map((link) => (
-        <li key={link.href}>
+        <li key={link.href} >
           <Link
             href={link.href}
             className={classnames({
               "nav-link": true,
               "text-zinc-900 font-bold": link.href === currentPathname,
+              "dark:text-white": link.href !== currentPathname,
             })}
           >
             {link.label}

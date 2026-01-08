@@ -11,12 +11,13 @@ import { auth } from '@/auth'
 import AsigneeSelect from './AsigneeSelect'
 
 interface IssueDetailPageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
-const IssueDetailPage = async ({ params: { id } }: IssueDetailPageProps) => {
+const IssueDetailPage = async ({ params }: IssueDetailPageProps) => {
+  const { id } = await params
   const session = await auth()
   const detailIssue = await prisma.issue.findUnique({
     where: {
@@ -27,15 +28,16 @@ const IssueDetailPage = async ({ params: { id } }: IssueDetailPageProps) => {
   if (!detailIssue)
     return notFound()
 
+  const isAuthenticated = !!session
+
   return (
     <Grid columns={{ initial: "1", md: "5" }} gap="5" className='max-w-6xl mx-auto px-4 py-6'>
       <Box className='md:col-span-4'>
         <IssueDetail detailIssue={detailIssue} />
       </Box>
-      {session && (
-        <Box>
-          <Flex direction="column" gap="4">
-            <AsigneeSelect />
+      {isAuthenticated && (
+        <Box className='mt-14'> 
+          <Flex direction="column" gap="4" >
             <EditIssueButton id={detailIssue.id} />
             <DeleteButton id={detailIssue.id} />
             <Dropdown>
@@ -48,6 +50,7 @@ const IssueDetailPage = async ({ params: { id } }: IssueDetailPageProps) => {
               <DropdownMenu.Separator />
               <DropdownMenu.Item color="red">Delete Issue</DropdownMenu.Item>
             </Dropdown>
+             <AsigneeSelect />
           </Flex>
         </Box>
       )}

@@ -45,7 +45,7 @@ const IssueForm = ({issue} : {issue?: Issue}) => {
         })
 
   return (
-    <div className="max-w-xl">
+    <div className="max-w-xl mt-6 ml-11">
       {error && (
         <Callout.Root  className="mb-4 w-125">
           <Callout.Icon>

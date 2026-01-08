@@ -1,3 +1,4 @@
+'use client'
 import { DropdownMenu, Button } from "@radix-ui/themes";
 
 const Dropdown = ({ children, triggerLabel = 'Options' }: { 

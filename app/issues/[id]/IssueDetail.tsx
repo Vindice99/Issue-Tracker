@@ -1,3 +1,4 @@
+'use client'
 import { StatusBadge } from '@/app/components'
 import { Card, Flex, Heading,Text } from '@radix-ui/themes'
 import React from 'react'
