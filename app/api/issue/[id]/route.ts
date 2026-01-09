@@ -15,6 +15,7 @@ export async function PATCH(
     });
   }
 
+  if(body.assigneeToUserId){
   const issue = await prisma.issue.findUnique({
     where: {
       id: parseInt(params.id),
