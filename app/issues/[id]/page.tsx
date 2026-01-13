@@ -50,7 +50,7 @@ const IssueDetailPage = async ({ params }: IssueDetailPageProps) => {
               <DropdownMenu.Separator />
               <DropdownMenu.Item color="red">Delete Issue</DropdownMenu.Item>
             </Dropdown>
-             <AsigneeSelect />
+             <AsigneeSelect issue={detailIssue} />
           </Flex>
         </Box>
       )}
