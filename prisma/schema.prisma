@@ -11,9 +11,6 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  // Connection URL moved to prisma.config.ts; configure adapter or accelerateUrl
-  // and pass it to the PrismaClient constructor as documented:
-  // https://pris.ly/d/config-datasource and https://pris.ly/d/prisma7-client-config
 }
 
 model Issue {
