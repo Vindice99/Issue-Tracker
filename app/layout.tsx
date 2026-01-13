@@ -6,6 +6,7 @@ import { Container, Theme, ThemePanel } from "@radix-ui/themes";
 import { ThemeProvider } from "./components/ThemeProvider";
 import AuthSession from "./auth/Provider";
 import QueryClientProvider from "./QueryClientProvider";
+import { Toaster } from "react-hot-toast";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,6 +39,7 @@ export default function RootLayout({
             <main>
               {children}
             </main>
+            <Toaster />
             {/* <ThemePanel /> */}
           </Theme>
         </ThemeProvider>
