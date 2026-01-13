@@ -1,17 +1,20 @@
 "use client";
 import React, { useState } from "react";
-import { TextField, Flex, Box, Callout, Text } from "@radix-ui/themes";
-import { MagnifyingGlassIcon, DotsHorizontalIcon, InfoCircledIcon} from "@radix-ui/react-icons";
-import { IconButton } from "@radix-ui/themes";
-import { Button } from "@radix-ui/themes";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle, Loader2 } from "lucide-react";
 import dynamic from "next/dynamic";
 import "easymde/dist/easymde.min.css";
 import axios from "axios";
 import { useForm, Controller } from "react-hook-form";
 import { useRouter } from "next/navigation";
-import {zodResolver} from "@hookform/resolvers/zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { schema } from "../../validationSchema";
 import z from "zod";
+
 // Dynamically import SimpleMDE to avoid SSR issues
 const SimpleMDE = dynamic(() => import("react-simplemde-editor"), {
   ssr: false,
@@ -22,64 +25,100 @@ type IssueForm = z.infer<typeof schema>;
 
 const NewIssuePage = () => {
   const router = useRouter();
-  const { register, control, handleSubmit, formState : {errors}} = useForm<IssueForm>({
-    resolver: zodResolver(schema), //  Zod resolver for validation
+  const { register, control, handleSubmit, formState: { errors, isSubmitting } } = useForm<IssueForm>({
+    resolver: zodResolver(schema),
   });
   const [error, setError] = useState("");
 
   return (
-    <div className="max-w-xl">
-      {error && (
-        <Callout.Root  className="mb-4 w-125">
-          <Callout.Icon>
-            <InfoCircledIcon />
-          </Callout.Icon>
-          <Callout.Text color="red">
-            {error}
-            application.
-          </Callout.Text>
-        </Callout.Root>
-      )}
-      <form
-        className="max-w-xl "
-        onSubmit={handleSubmit(async (data) => {
-          try {
-            await axios.post("/api/issue", data);
-            router.push("/issues");
-          } catch (error) {
-            setError("Failed to create issue. Please try again.");
-          }
-        })}
-      >
-        <Flex direction="column" gap="5" maxWidth="600px">
-          <Box maxWidth="500px">
-            <TextField.Root placeholder="Issue Title" {...register("title")} className="mb-2">
-              <TextField.Slot>
-                <MagnifyingGlassIcon height="30" width="16" />
-              </TextField.Slot>
-              <TextField.Slot>
-                <IconButton size="1" variant="ghost">
-                  <DotsHorizontalIcon height="14" width="14" />
-                </IconButton>
-              </TextField.Slot>
-            </TextField.Root>
-            {errors.title && <Text color="red" size="2">{errors.title.message} </Text>}
-          </Box>
-          <Box maxWidth="500px">
-            <Controller
-              name="description"
-              control={control}
-              render={({ field }) => (
-                <SimpleMDE placeholder="Issue Description" {...field} />
+    <div className="container mx-auto py-8 max-w-3xl">
+      <Card className="shadow-lg border-2 bg-gradient-to-br from-white via-blue-50/30 to-purple-50/30 dark:from-gray-900 dark:via-blue-950/20 dark:to-purple-950/20">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold">Create New Issue</CardTitle>
+          <CardDescription>
+            Report a bug, request a feature, or submit any issue for tracking
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {error && (
+            <Alert variant="destructive" className="mb-6">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          
+          <form
+            onSubmit={handleSubmit(async (data) => {
+              try {
+                setError("");
+                await axios.post("/api/issue", data);
+                router.push("/issues");
+              } catch (error) {
+                setError("Failed to create issue. Please try again.");
+              }
+            })}
+            className="space-y-6"
+          >
+            <div className="space-y-2">
+              <Label htmlFor="title" className="text-base font-semibold">
+                Title
+              </Label>
+              <Input
+                id="title"
+                placeholder="Enter a descriptive title for your issue"
+                {...register("title")}
+                className={errors.title ? "border-red-500" : ""}
+              />
+              {errors.title && (
+                <p className="text-sm text-red-500 mt-1">{errors.title.message}</p>
               )}
-            />
-             {errors.description && <Text color="red" size="2">{errors.description.message}</Text>}
-          </Box>
-          <Box maxWidth="200px">
-            <Button type="submit">Create Issue</Button>
-          </Box>
-        </Flex>
-      </form>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="description" className="text-base font-semibold">
+                Description
+              </Label>
+              <Controller
+                name="description"
+                control={control}
+                render={({ field }) => (
+                  <SimpleMDE 
+                    placeholder="Provide detailed information about the issue (supports Markdown)" 
+                    {...field} 
+                  />
+                )}
+              />
+              {errors.description && (
+                <p className="text-sm text-red-500 mt-1">{errors.description.message}</p>
+              )}
+            </div>
+
+            <div className="flex gap-3">
+              <Button 
+                type="submit" 
+                disabled={isSubmitting}
+                className="w-32"
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Creating...
+                  </>
+                ) : (
+                  "Create Issue"
+                )}
+              </Button>
+              <Button 
+                type="button" 
+                variant="outline"
+                onClick={() => router.push("/issues")}
+              >
+                Cancel
+              </Button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 };
