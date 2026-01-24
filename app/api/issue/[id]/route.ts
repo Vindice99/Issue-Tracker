@@ -23,7 +23,8 @@ export async function PATCH(
     });
   }
   //Destructure validated fields
-  const {assignedToUserId,title, description} = body;
+  const {assignedToUserId,title, description,status} = body;
+  //Fetch and validate assigned user
   if(assignedToUserId)
   {
     const user =await prisma.user.findUnique({
@@ -35,7 +36,7 @@ export async function PATCH(
       });
     }
   }
-
+//Fetch existing issue
   const issue = await prisma.issue.findUnique({
     where: {
       id: parseInt((await params).id),
@@ -54,6 +55,7 @@ export async function PATCH(
       title,
       description,
       assignedToUserId,
+      status,
     },
   });
 
@@ -86,3 +88,5 @@ export async function DELETE(
 
   return NextResponse.json(deletedIssue);
 }
+
+

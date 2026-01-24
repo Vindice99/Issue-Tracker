@@ -9,6 +9,7 @@ import Link from 'next/link'
 import DeleteButton from '../_components/DeleteButton'
 import { auth } from '@/auth'
 import AsigneeSelect from './AsigneeSelect'
+import StatusSelect from './StatusSelect'
 
 interface IssueDetailPageProps {
   params: Promise<{
@@ -50,6 +51,7 @@ const IssueDetailPage = async ({ params }: IssueDetailPageProps) => {
               <DropdownMenu.Separator />
               <DropdownMenu.Item color="red">Delete Issue</DropdownMenu.Item>
             </Dropdown>
+            <StatusSelect issue={detailIssue} />
              <AsigneeSelect issue={detailIssue} />
           </Flex>
         </Box>

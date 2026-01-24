@@ -1,27 +1,26 @@
 'use client'
-import { Issue, User } from "@prisma/client";
-import axios from "axios";
+import { useUsers } from '@/app/components/GetUser';
+import Skeleton from '@/app/components/Skeleton';
+import { Issue } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
-import React, { useEffect, useState } from 'react'
-import {useQuery} from '@tanstack/react-query'
-import toast from 'react-hot-toast'
-import Skeleton from '@/app/components/Skeleton'
-import { cacheTag } from "next/dist/server/use-cache/cache-tag";
+import axios from "axios";
+import toast from 'react-hot-toast';
 
 const AsigneeSelect = ({ issue }: { issue: Issue }) => {
-
-    const {data:users, error, isLoading} = useQuery<User[]>({
-		queryKey: ['users'],
-		queryFn: async () => {
-			const response = await axios.get('/api/users').then(res => res.data)
-			return response
-		},
-		staleTime: 5 * 60 * 1000, // 5 minutes
-		retry: 3, // Retry once on failure
-	})
+ 
+    const {data:users, error, isLoading} = useUsers()
 	if(isLoading) return <Skeleton/>
 
 	if(error) return null
+
+	const assignIssue = (userId: string) => 
+		{
+				 axios.patch('/api/issue/' + issue.id, {
+				assignedToUserId: userId === 'unassigned' ? null : userId}).catch(() => {
+					toast.error('Failed to update assignee')
+					console.error(error)
+				})
+		}
 	// // Fetch users from the API
 	// const [users, setUsers] = useState<User[]>([])
 	// useEffect(() => {
@@ -36,14 +35,7 @@ const AsigneeSelect = ({ issue }: { issue: Issue }) => {
 		<>
 		<Select.Root 
 		defaultValue={issue.assignedToUserId || 'unassigned'}
-		onValueChange={ (userId) => 
-		{
-				 axios.patch('/api/issue/' + issue.id, {
-				assignedToUserId: userId === 'unassigned' ? null : userId}).catch(() => {
-					toast.error('Failed to update assignee')
-					console.error(error)
-				})
-		}}
+		onValueChange={assignIssue }
 		>
 			<Select.Trigger placeholder="Select assignee…" />
 			<Select.Content>
