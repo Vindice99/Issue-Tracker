@@ -2,7 +2,7 @@
 import { Issue, IssueStatus, User } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 const IssueStatusFilter = () => {
   const statuslabels: Record<IssueStatus, string> = {
@@ -16,12 +16,19 @@ const IssueStatusFilter = () => {
   }));
 
   const router = useRouter();
+  const searchParams = useSearchParams();
   return (
     <>
       <Select.Root onValueChange={(status) => {
-        router.push(status === 'All' ? '/issues' : `/issues?status=${status}`);
+        const params = new URLSearchParams();
+        if(status)params.append('status', status);
+        if(searchParams.get('orderBy')) params.append('orderBy', searchParams.get('orderBy')!);
+        const query = params.toString();
+        router.push('/issues' + (query ? `?${query}` : ''));
         router.refresh();
-      }}>
+      }}
+      defaultValue={searchParams.get('status') || 'All'}
+      >
         <Select.Trigger placeholder="Select status…" />
         <Select.Content>
           <Select.Group>
