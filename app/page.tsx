@@ -1,6 +1,8 @@
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRightIcon, CheckCircledIcon, RocketIcon } from "@radix-ui/react-icons";
+import LatestIssue from "./LatestIssue";
 
 export default function Home() {
   return (
@@ -36,6 +38,7 @@ export default function Home() {
                 Create New Issue
               </Button>
             </Link>
+            <LatestIssue/>
           </div>
         </div>
       </section>

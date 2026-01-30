@@ -1,3 +1,4 @@
+
 import { AddIssueButton } from "@/app/components";
 import IssueStatusFilter from "@/app/issues/IssueStatusFilter";
 import prisma from "@/prisma/client";
@@ -36,7 +37,6 @@ const IssuePage = async ({
         pageSize={pageSize}
         currentPage={page}
         itemCount={issueCount}
-        onPageChange={() => {}}
       />
     </Container>
   );

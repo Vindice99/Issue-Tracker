@@ -13,24 +13,25 @@ interface Props {
   itemCount: number;
   pageSize: number;
   currentPage: number;
-  onPageChange: (page: number) => void;
 }
-const router = useRouter();
-const searchParams = useSearchParams();
+
 const Pagination = ({
   itemCount,
   pageSize,
   currentPage,
-  onPageChange,
 }: Props) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const pageCount = Math.ceil(itemCount / pageSize);
 
   if (pageCount <= 1) return null; // No pagination needed for a single page
+  
   const changePage = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", page.toString());
     router.push(`?${params.toString()}`);
   }
+  
   return (
     <Flex>
       <Text size="2">
