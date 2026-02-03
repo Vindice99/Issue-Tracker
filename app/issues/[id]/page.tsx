@@ -10,6 +10,7 @@ import DeleteButton from '../_components/DeleteButton'
 import { auth } from '@/auth'
 import AsigneeSelect from './AsigneeSelect'
 import StatusSelect from './StatusSelect'
+import { cache } from 'react'
 
 interface IssueDetailPageProps {
   params: Promise<{
@@ -17,14 +18,15 @@ interface IssueDetailPageProps {
   }>
 }
 
+const fetchIssue = cache(async(issueId : number) => 
+   await prisma.issue.findUnique({where : {id: issueId}})
+)
+
 const IssueDetailPage = async ({ params }: IssueDetailPageProps) => {
   const { id } = await params
   const session = await auth()
-  const detailIssue = await prisma.issue.findUnique({
-    where: {
-      id: parseInt(id)
-    }
-  })
+  const detailIssue = await fetchIssue(parseInt(id))
+
 
   if (!detailIssue)
     return notFound()
@@ -59,5 +61,14 @@ const IssueDetailPage = async ({ params }: IssueDetailPageProps) => {
     </Grid>
   )
 }
+
+//dynamic metadata generation
+export async function generateMetadata({ params }: IssueDetailPageProps) {
+    const issue = await fetchIssue(parseInt((await params).id))
+    return {
+      title: issue ? `Issue #${issue.id} - ${issue.title}` : 'Issue Not Found',
+      description: issue ? `Details and status of issue #${issue.id}` : 'The requested issue does not exist.',
+    }
+  }
 
 export default IssueDetailPage

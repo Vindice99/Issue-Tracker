@@ -3,6 +3,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRightIcon, CheckCircledIcon, RocketIcon } from "@radix-ui/react-icons";
 import LatestIssue from "./LatestIssue";
+import { title } from "process";
+import { Metadata } from "next";
 
 export default function Home() {
   return (
@@ -117,3 +119,8 @@ const features = [
     description: "Track issue status with visual badges. Know exactly what's open, in progress, or closed at a glance.",
   },
 ];
+
+export const metadata: Metadata = {
+  title: 'Issue Tracker - Home',
+  description: 'Track and manage your issues efficiently with our modern issue tracking application.',
+}

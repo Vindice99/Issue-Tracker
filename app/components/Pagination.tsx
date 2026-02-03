@@ -33,7 +33,7 @@ const Pagination = ({
   }
   
   return (
-    <Flex>
+    <Flex justify="center" align="center" gap="2" mt="6">
       <Text size="2">
         Page {currentPage} of {pageCount}
       </Text>

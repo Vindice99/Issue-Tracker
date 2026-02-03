@@ -44,12 +44,14 @@
     "react-loading-skeleton": "^3.5.0",
     "react-markdown": "^8.0.7",
     "react-simplemde-editor": "^5.2.0",
+    "recharts": "^3.7.0",
     "tailwind-merge": "^3.4.0",
     "zod": "^4.1.13"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@prisma/client": "^7.2.0",
+    "@recharts/devtools": "^0.0.8",
     "@tailwindcss/postcss": "^4",
     "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^20",
