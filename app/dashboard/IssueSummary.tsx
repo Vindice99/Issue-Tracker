@@ -3,6 +3,7 @@ import { Card, Flex, Text } from '@radix-ui/themes'
 import Link from 'next/link';
 import React from 'react'
 
+
 interface Prop{
     open: number;
     inProgress: number;
