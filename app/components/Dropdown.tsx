@@ -1,22 +1,37 @@
 'use client'
 import { DropdownMenu, Button } from "@radix-ui/themes";
+import React from 'react';
 
-const Dropdown = ({ children, triggerLabel = 'Options' }: { 
-  children: React.ReactNode;
-  triggerLabel?: string;
-}) => {
+interface DropdownOption{
+  value: string;
+  label: string;
+}
+
+
+interface DropdownProps {
+  value?: string;
+  options: DropdownOption[];
+  onChange: (value: string) => void;
+}
+
+
+const Dropdown = ({ value, options, onChange } : DropdownProps) => {
+  const selectedOption = options.find(opt => opt.value === value);
   return (
-    <DropdownMenu.Root>
-      <DropdownMenu.Trigger>
-        <Button variant="soft">
-          {triggerLabel}
-          <DropdownMenu.TriggerIcon />
-        </Button>
-      </DropdownMenu.Trigger>
-      <DropdownMenu.Content>
-        {children}
-      </DropdownMenu.Content>
-    </DropdownMenu.Root>
+      <DropdownMenu.Root>
+          <DropdownMenu.Trigger>
+            <Button variant="soft">
+              {selectedOption ? selectedOption.label : 'Select…'}
+            </Button>
+          </DropdownMenu.Trigger>
+          <DropdownMenu.Content>
+            {options.map((task) => (
+              <DropdownMenu.Item key={task.value} onSelect={() => onChange(task.value)}>
+                {task.label}
+              </DropdownMenu.Item>
+            ))}
+          </DropdownMenu.Content>
+      </DropdownMenu.Root>
   );
 };
 

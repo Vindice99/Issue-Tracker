@@ -1,11 +1,11 @@
-
 import { AddIssueButton } from "@/app/components";
 import IssueStatusFilter from "@/app/issues/IssueStatusFilter";
 import prisma from "@/prisma/client";
 import { Issue, IssueStatus } from "@prisma/client";
-import { Container } from "@radix-ui/themes";
+import { Container, Flex } from "@radix-ui/themes";
 import Pagination from "../components/Pagination";
 import IssueTable from "./IssueTable";
+import PageSizeSelector from "./PageSizeSelector";
 
 const IssuePage = async ({
   searchParams,
@@ -14,13 +14,14 @@ const IssuePage = async ({
     status?: IssueStatus;
     orderBy?: keyof Issue;
     page?: string;
+    pageSize?: string;
   }>;
 }) => {
   const params = await searchParams;
   const statuses = Object.values(IssueStatus);
   const status = statuses.includes(params.status!) ? params.status : undefined;
   const page = parseInt(params.page || "1", 10);
-  const pageSize = 3;
+  const pageSize = parseInt(params.pageSize || "10", 10);
   const where = { status };
 
   // Get total count for pagination
@@ -28,10 +29,13 @@ const IssuePage = async ({
 
   return (
     <Container className="p-6 max-w-full">
-      <span className="flex justify-between gap-1.5">
-        <AddIssueButton />
-        <IssueStatusFilter />
-      </span>
+      <Flex>
+        <span className="flex justify-between gap-1.5">
+          <AddIssueButton />
+          <IssueStatusFilter />
+          <PageSizeSelector />
+        </span>
+      </Flex>
       <IssueTable searchParams={searchParams} />
       <Pagination
         pageSize={pageSize}

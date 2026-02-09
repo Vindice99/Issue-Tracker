@@ -14,6 +14,7 @@ const IssueTable = async ({
     status?: IssueStatus; 
     orderBy?: keyof Issue;
     page?: string;
+    pageSize?: string;
   }> 
 }) => {
 
@@ -36,7 +37,7 @@ const IssueTable = async ({
     : 'createdAt';
   
   const page = parseInt(params.page || '1', 10);
-  const pageSize = 3;
+  const pageSize = parseInt(params.pageSize || '10', 10);
 
   // Fetch issues with dynamic sorting
   const issues = await prisma.issue.findMany({
