@@ -29,7 +29,7 @@ const Pagination = ({
   const changePage = (page: number) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", page.toString());
-    router.push(`?${params.toString()}`);
+    router.push(`?${params.toString()}`); //after changing page, navigate to the new URL
   }
   
   return (

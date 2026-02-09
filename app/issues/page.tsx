@@ -7,6 +7,9 @@ import Pagination from "../components/Pagination";
 import IssueTable from "./IssueTable";
 import PageSizeSelector from "./PageSizeSelector";
 
+//issueCount is the total number of issues matching the current filter
+//where clause is built based on the status filter
+
 const IssuePage = async ({
   searchParams,
 }: {
@@ -24,25 +27,34 @@ const IssuePage = async ({
   const pageSize = parseInt(params.pageSize || "10", 10);
   const where = { status };
 
-  // Get total count for pagination
   const issueCount = await prisma.issue.count({ where });
 
   return (
-    <Container className="p-6 max-w-full">
-      <Flex>
-        <span className="flex justify-between gap-1.5">
-          <AddIssueButton />
-          <IssueStatusFilter />
-          <PageSizeSelector />
-        </span>
-      </Flex>
-      <IssueTable searchParams={searchParams} />
-      <Pagination
-        pageSize={pageSize}
-        currentPage={page}
-        itemCount={issueCount}
-      />
-    </Container>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-indigo-950 dark:to-purple-950">
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiM4ODg4ODgiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PHBhdGggZD0iTTM2IDE2SDE2djIwaDIwVjE2eiIvPjwvZz48L2c+PC9zdmc+')] opacity-40"></div>
+      
+      <Container className="relative p-6 max-w-full">
+        <div className="backdrop-blur-sm bg-white/70 dark:bg-gray-800/70 rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/20 p-6 mb-6">
+          <Flex className="flex-wrap gap-3" justify="between" align="center">
+            <div className="flex gap-3 flex-wrap">
+              <AddIssueButton />
+              <IssueStatusFilter />
+            </div>
+            <PageSizeSelector />
+          </Flex>
+        </div>
+        
+        <div className="backdrop-blur-sm bg-white/70 dark:bg-gray-800/70 rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/20 overflow-hidden mb-6">
+          <IssueTable searchParams={searchParams} />
+        </div>
+        
+        <Pagination
+          pageSize={pageSize}
+          currentPage={page}
+          itemCount={issueCount}
+        />
+      </Container>
+    </div>
   );
 };
 export const dynamic = "force-dynamic";
