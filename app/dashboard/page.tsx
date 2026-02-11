@@ -3,10 +3,11 @@ import IssueSummary from "./IssueSummary";
 import { prisma } from "@/prisma";
 import IssueChart from "./IssueChart";
 import { Flex, Grid } from "@radix-ui/themes";
-import LatestIssue from "../LatestIssue";
 import LatestIssueDetail from "./LatestIssueDetail";
 import { Metadata } from "next";
 import { redis } from "../../lib/redis";
+import {auth} from "@/auth";
+import { redirect } from "next/navigation";
 
 const DashBoardPage = async () => {
   // //Can refactor to a single object query later
@@ -18,6 +19,10 @@ const DashBoardPage = async () => {
 
   const cacheKey = "dashboard:stats"; // Key for caching issue stats
   let statsData = await redis.get(cacheKey);
+  const session = await auth();
+  if (session?.user.role !== "admin") {
+    redirect("/"); // Redirect unauthorized users
+  }
   let stats;
 
   if (!statsData) {

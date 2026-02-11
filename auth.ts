@@ -31,6 +31,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       if (account && user) {
         return {
            ...token,
+          role: user.role,
           accessToken: account.access_token,
           refreshToken: account.refresh_token,
           accessTokenExpires: account.expires_at! * 1000,
@@ -47,6 +48,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   }, 
   async session({session, token}: {session: any; token: any}) {
       session.user.id = token.userId
+      session.user.role = token.role
       session.accessToken = token.accessToken
       session.error = token.error
       return session
