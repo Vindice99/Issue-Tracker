@@ -1,0 +1,74 @@
+# Include any files or directories that you don't want to be copied to your
+# container here (e.g., local build artifacts, temporary files, etc.).
+
+# Dependencies
+node_modules
+npm-debug.log
+package-lock.json
+
+# Next.js build output
+.next
+out
+build
+dist
+
+# Environment files (keep .env.example if you have one)
+.env
+.env.*
+!.env.example
+
+# Git
+.git
+.gitignore
+
+# Docker
+.dockerignore
+Dockerfile*
+docker-compose*
+compose.y*ml
+
+# IDE & Editors
+.vscode
+.idea
+.vs
+*.swp
+*.swo
+*~
+**/.project
+**/.settings
+**/.classpath
+
+# Testing & Coverage
+coverage
+.nyc_output
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.ts
+**/*.spec.tsx
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Documentation
+README.md
+LICENSE
+*.md
+!README.Docker.md
+
+# Cache
+.cache
+.turbo
+
+# Misc
+.prettierrc
+.eslintrc*
+.editorconfig
+**/*.dbmdl
+**/*.jfm
+**/secrets.dev.yaml
+**/values.dev.yaml

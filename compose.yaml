@@ -1,0 +1,89 @@
+# Docker Compose configuration for Issue Tracker application
+# Full stack: Next.js + PostgreSQL + Redis
+
+services:
+  # Next.js Application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: issue-tracker-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: production
+      # Database connection (update with your actual values)
+      DATABASE_URL: postgresql://postgres:postgres@db:5432/issuetracker?schema=public
+      # Redis connection for rate limiting - Use cloud Redis or local (see below)
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379}
+      # NextAuth (generate a secure secret: openssl rand -base64 32)
+      NEXTAUTH_URL: http://localhost:3000
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-your-secret-here-change-this}
+      # Sentry (optional, comment out if not using)
+      SENTRY_DSN: ${SENTRY_DSN:-}
+    depends_on:
+      db:
+        condition: service_healthy
+      # Comment out redis dependency if using cloud Redis
+      # redis:
+      #   condition: service_healthy
+    networks:
+      - issue-tracker-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: issue-tracker-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: issuetracker
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - issue-tracker-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache (for rate limiting)
+  redis:
+    image: redis:7-alpine
+    container_name: issue-tracker-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - issue-tracker-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:
+    name: issue-tracker-postgres-data
+  redis-data:
+    name: issue-tracker-redis-data
+
+networks:
+  issue-tracker-network:
+    name: issue-tracker-network
+    driver: bridge
+
