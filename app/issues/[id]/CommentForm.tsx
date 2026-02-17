@@ -28,8 +28,12 @@ const CommentForm = ({ issueId }: CommentFormProps) => {
       setComment('')
       toast.success('Comment added successfully')
       router.refresh()
-    } catch (error: any) {
-      toast.error(error.response?.data?.error || 'Failed to add comment')
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        toast.error(error.response?.data?.error || 'Failed to add comment')
+      } else {
+        toast.error('Failed to add comment')
+      }
     } finally {
       setIsSubmitting(false)
     }
