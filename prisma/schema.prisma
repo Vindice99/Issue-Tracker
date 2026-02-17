@@ -19,6 +19,7 @@ model Issue {
   status           IssueStatus @default(OPEN)
   assignedToUserId String?     @db.VarChar(255)
   assignedToUser   User?       @relation(fields: [assignedToUserId], references: [id], onDelete: SetNull)
+  comments         Comment[]
   createdAt        DateTime    @default(now())
   updateAt         DateTime    @updatedAt
 }
@@ -35,6 +36,7 @@ model User {
   // Optional for WebAuthn support
   Authenticator  Authenticator[]
   assignedIssues Issue[]
+  comments       Comment[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -97,6 +99,17 @@ model Authenticator {
 enum Role {
   USER
   ADMIN
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  text      String   @db.Text
+  issueId   Int
+  issue     Issue    @relation(fields: [issueId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum IssueStatus {

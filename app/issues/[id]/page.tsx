@@ -10,6 +10,7 @@ import { auth } from "@/auth";
 import AsigneeSelect from "./AsigneeSelect";
 import StatusSelect from "./StatusSelect";
 import { cache } from "react";
+import Comments from "./Comments";
 
 interface IssueDetailPageProps {
   params: Promise<{
@@ -19,7 +20,23 @@ interface IssueDetailPageProps {
 
 const fetchIssue = cache(
   async (issueId: number) =>
-    await prisma.issue.findUnique({ where: { id: issueId } }),
+    await prisma.issue.findUnique({ 
+      where: { id: issueId },
+      include: {
+        comments: {
+          include: {
+            user: {
+              select: {
+                name: true,
+                email: true,
+                image: true,
+              },
+            },
+          },
+          orderBy: { createdAt: "asc" },
+        },
+      },
+    }),
 );
 
 const IssueDetailPage = async ({ params }: IssueDetailPageProps) => {
@@ -39,6 +56,11 @@ const IssueDetailPage = async ({ params }: IssueDetailPageProps) => {
     >
       <Box className="md:col-span-4">
         <IssueDetail detailIssue={detailIssue} />
+        <Comments 
+          issueId={detailIssue.id} 
+          comments={detailIssue.comments} 
+          isAuthenticated={isAuthenticated}
+        />
       </Box>
       {isAuthenticated && (
         <Box className="mt-14">
