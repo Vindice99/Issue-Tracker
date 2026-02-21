@@ -7,6 +7,8 @@ import { useQuery } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import Skeleton from "@/app/components/Skeleton";
 import { cacheTag } from "next/dist/server/use-cache/cache-tag";
+import { useSearchParams } from "next/navigation";
+import { useRouter } from "next/router";
 
 const StatusSelect = ({ issue }: { issue: Issue }) => {
   const statuslabels: Record<IssueStatus, string> = {
@@ -14,6 +16,7 @@ const StatusSelect = ({ issue }: { issue: Issue }) => {
     [IssueStatus.IN_PROGRESS]: "In Progress",
     [IssueStatus.CLOSED]: "Closed",
   };
+
   //Auto-generate array from the enum
   const statutes = Object.values(IssueStatus).map(value => ({
 	label: statuslabels[value], value

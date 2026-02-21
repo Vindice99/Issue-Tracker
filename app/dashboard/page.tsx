@@ -20,7 +20,7 @@ const DashBoardPage = async () => {
   const cacheKey = "dashboard:stats"; // Key for caching issue stats
   let statsData = await redis.get(cacheKey);
   const session = await auth();
-  if (session?.user.role !== "admin") {
+  if (session?.user.role !== "ADMIN") {
     redirect("/"); // Redirect unauthorized users
   }
   let stats;
