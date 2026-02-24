@@ -68,16 +68,23 @@ const IssueDetailPage = async ({ params }: IssueDetailPageProps) => {
             <EditIssueButton id={detailIssue.id} />
             <DeleteButton id={detailIssue.id} />
             <DropdownMenu.Root>
-              <DropdownMenu.Item>
-                <Link href={`/issues/${detailIssue.id}/edit`}>
-                  Assign to User
-                </Link>
-              </DropdownMenu.Item>
-              <DropdownMenu.Separator />
-              <DropdownMenu.Item>Change Severity</DropdownMenu.Item>
-              <DropdownMenu.Item>Change Status</DropdownMenu.Item>
-              <DropdownMenu.Separator />
-              <DropdownMenu.Item color="red">Delete Issue</DropdownMenu.Item>
+              <DropdownMenu.Trigger>
+                <button className="cursor-pointer rounded-md bg-gray-200 px-4 py-2 text-sm font-medium hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600">
+                  More Actions
+                </button>
+              </DropdownMenu.Trigger>
+              <DropdownMenu.Content>
+                <DropdownMenu.Item>
+                  <Link href={`/issues/${detailIssue.id}/edit`}>
+                    Assign to User
+                  </Link>
+                </DropdownMenu.Item>
+                <DropdownMenu.Separator />
+                <DropdownMenu.Item>Change Severity</DropdownMenu.Item>
+                <DropdownMenu.Item>Change Status</DropdownMenu.Item>
+                <DropdownMenu.Separator />
+                <DropdownMenu.Item color="red">Delete Issue</DropdownMenu.Item>
+              </DropdownMenu.Content>
             </DropdownMenu.Root>
             <StatusSelect issue={detailIssue} />
             <AsigneeSelect issue={detailIssue} />

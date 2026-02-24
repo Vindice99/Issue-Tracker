@@ -9,7 +9,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: PrismaAdapter(prisma),
   session: {
     strategy: "jwt",
-    maxAge: 30 * 24 * 60 * 60, // 30 days
+    maxAge: 30 * 24 * 60 * 60, 
   },
   providers: [
     Google({
@@ -38,6 +38,18 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           userId: user.id,
         }
       }
+
+      // Refresh role from database on every token refresh
+      if (token.userId) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.userId },
+          select: { role: true },
+        });
+        if (dbUser) {
+          token.role = dbUser.role;
+        }
+      }
+
      // Access token still valid
       if (Date.now() < token.accessTokenExpires) {
         return token
