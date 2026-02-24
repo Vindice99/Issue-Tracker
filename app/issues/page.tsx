@@ -11,4 +11,5 @@ const IssuePage = () => {
   );
 };
 
+
 export default IssuePage;
