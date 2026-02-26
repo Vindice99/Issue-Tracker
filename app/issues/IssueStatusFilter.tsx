@@ -1,7 +1,7 @@
 'use client'
-import { Issue, IssueStatus, User } from "@prisma/client";
+import { IssueStatus } from "@prisma/client";
 import { Select } from "@radix-ui/themes";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
 const IssueStatusFilter = () => {

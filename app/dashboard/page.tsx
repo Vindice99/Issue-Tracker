@@ -1,6 +1,6 @@
 import React from "react";
 import IssueSummary from "./IssueSummary";
-import { prisma } from "@/prisma";
+import prisma from "@/prisma/client";
 import IssueChart from "./IssueChart";
 import { Flex, Grid } from "@radix-ui/themes";
 import LatestIssueDetail from "./LatestIssueDetail";
@@ -18,7 +18,7 @@ const DashBoardPage = async () => {
   //   const closed = await prisma.issue.count({ where: { status: "CLOSED" } });
 
   const cacheKey = "dashboard:stats"; // Key for caching issue stats
-  let statsData = await redis.get(cacheKey);
+  const statsData = await redis.get<{ open: number; inProgress: number; closed: number }>(cacheKey);
   const session = await auth();
   if (session?.user.role !== "ADMIN") {
     redirect("/"); // Redirect unauthorized users
@@ -33,9 +33,9 @@ const DashBoardPage = async () => {
       }),
       closed: await prisma.issue.count({ where: { status: "CLOSED" } }),
     };
-    await redis.setex(cacheKey, 600, JSON.stringify(stats)); 
+    await redis.set(cacheKey, stats, { ex: 600 }); // Cache for 10 minutes
   } else {
-    stats = JSON.parse(statsData);
+    stats = statsData;
   }
 
   return (

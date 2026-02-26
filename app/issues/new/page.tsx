@@ -53,7 +53,7 @@ const NewIssuePage = () => {
                 setError("");
                 await axios.post("/api/issue", data);
                 router.push("/issues");
-              } catch (error) {
+              } catch {
                 setError("Failed to create issue. Please try again.");
               }
             })}

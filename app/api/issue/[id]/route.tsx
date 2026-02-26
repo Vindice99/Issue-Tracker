@@ -18,12 +18,12 @@ export async function PATCH(
   const body = await request.json();
   const validation = patchIssueScheme.safeParse(body);
   if (!validation.success) {
-    return NextResponse.json(JSON.stringify({ errors: validation.error.format() }), {
+    return NextResponse.json({ errors: validation.error.format() }, {
       status: 400,
     });
   }
   //Destructure validated fields
-  const {assignedToUserId,title, description,status} = body;
+  const {assignedToUserId, title, description, status} = validation.data;
   //Fetch and validate assigned user
   if(assignedToUserId)
   {
@@ -31,7 +31,7 @@ export async function PATCH(
       where: {id: assignedToUserId},
     })
     if(!user){
-      return NextResponse.json(JSON.stringify({ error: "Assigned user not found" }), {
+      return NextResponse.json(({ error: "Assigned user not found" }), {
         status: 404,
       });
     }
@@ -39,12 +39,12 @@ export async function PATCH(
 //Fetch existing issue
   const issue = await prisma.issue.findUnique({
     where: {
-      id: parseInt((await params).id),
+      id: parseInt(id),
     },
   });
 
   if (!issue) {
-    return NextResponse.json(JSON.stringify({ error: "Issue not found" }), {
+    return NextResponse.json({ error: "Issue not found" }, {
       status: 404,
     });
   }
@@ -73,12 +73,12 @@ export async function DELETE(
   }
   const issue = await prisma.issue.findUnique({
     where: {
-      id: parseInt((await params).id),
+      id: parseInt(id),
     },
   });
 
   if (!issue) {
-    return NextResponse.json(JSON.stringify({ error: "Issue not found" }), {
+    return NextResponse.json({ error: "Issue not found" }, {
       status: 404,
     });
   }

@@ -16,8 +16,15 @@ const IssueChart = ({ open, inProgress, closed }: Prop) => {
     { name: "Closed", value: closed, gradient: "redGradient" },
   ];
 
-  const CustomContent = (props: any) => {
-    const { x, y, width, height, name, value, gradient, index } = props;
+  const CustomContent = (props: Record<string, unknown>) => {
+    const x = props.x as number;
+    const y = props.y as number;
+    const width = props.width as number;
+    const height = props.height as number;
+    const name = props.name as string;
+    const value = props.value as number;
+    const gradient = props.gradient as string;
+    const index = props.index as number;
     
     return (
       <g>

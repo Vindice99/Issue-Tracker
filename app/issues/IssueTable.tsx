@@ -32,7 +32,7 @@ const IssueTable = async ({
   const where = {status}
   
   const validOrderBy = ['title', 'status', 'createdAt'] as const;
-  const orderBy = validOrderBy.includes(params.orderBy as any) 
+  const orderBy = validOrderBy.includes(params.orderBy as typeof validOrderBy[number]) 
     ? params.orderBy 
     : 'createdAt';
   

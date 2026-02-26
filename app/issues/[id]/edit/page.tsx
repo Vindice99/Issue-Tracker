@@ -7,11 +7,12 @@ const IssueForm = dynamic(() => import('../../_components/IssueForm'),)
 
 interface EditIssuePageProps {  
    //use params to get the id from the url
-   params: {
+   params: Promise<{
     id: string
-   }
+   }>
 }
-const EditIssuePage = async ({ params : {id} }: EditIssuePageProps) => {
+const EditIssuePage = async ({ params }: EditIssuePageProps) => {
+  const { id } = await params;
 
   const IssueNeedToEdit = await prisma.issue.findUnique({
     where: {

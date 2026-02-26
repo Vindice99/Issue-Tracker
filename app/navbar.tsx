@@ -7,15 +7,11 @@ import classnames from "classnames";
 import {
   Avatar,
   Button,
-  Container,
   DropdownMenu,
-  Spinner,
   Text,
 } from "@radix-ui/themes";
 import { Skeleton, ThemeToggle } from "./components";
 import { signIn, signOut, useSession } from "next-auth/react";
-import Dropdown from "./components/Dropdown";
-import { stat } from "fs";
 
 const Navbar = () => {
 

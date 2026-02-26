@@ -5,12 +5,11 @@ import { Button } from '@radix-ui/themes'
 import { useRouter } from "next/navigation";
 import axios from 'axios';
 import { useState } from 'react';
-import { set } from 'zod';
 
 
 const DeleteButton = ({ id }: { id: number }) => {
     const router = useRouter();
-    const [error, setError] = useState(false);
+    const [showError, setShowError] = useState(false);
     const [deleting, setDeleting] = useState(false);    
     const deleteIssue = async () => {
         try {
@@ -19,9 +18,9 @@ const DeleteButton = ({ id }: { id: number }) => {
             await axios.delete(`/api/issue/${id}`)
             router.push('/issues')
             router.refresh()
-        } catch (error) {
+        } catch {
             setDeleting(false)  
-            setError(true)
+            setShowError(true)
         }
     }
     return (
@@ -76,18 +75,18 @@ const DeleteButton = ({ id }: { id: number }) => {
                     </AlertDialog.Content>
                 </AlertDialog.Portal>
             </AlertDialog.Root>
-            <AlertDialog.Root open={error}>
+            <AlertDialog.Root open={showError}>
                 <AlertDialog.Portal>
                     <AlertDialog.Overlay className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50" />
                     <AlertDialog.Content className="fixed left-1/2 top-1/2 z-50 w-full max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 p-6 shadow-2xl rounded-lg sm:rounded-xl">
                         <AlertDialog.Title className="text-lg font-semibold text-gray-900 dark:text-gray-100">Error</AlertDialog.Title>
-                        <AlertDialog.Description className="text-sm text-gray-600 dark:text-gray-400">This issue can't be deleted.</AlertDialog.Description>
+                        <AlertDialog.Description className="text-sm text-gray-600 dark:text-gray-400">This issue can&apos;t be deleted.</AlertDialog.Description>
                         <button className="inline-flex h-[35px] items-center justify-center 
                         rounded bg-gray-200 dark:bg-gray-700 px-[15px] font-medium 
                         leading-none text-gray-700 dark:text-gray-300 outline-none 
                         outline-offset-1 hover:bg-gray-300 dark:hover:bg-gray-600 
                         focus-visible:outline-2 focus-visible:outline-gray-400 select-none mt-2"
-                            onClick={() => setError(false)}
+                            onClick={() => setShowError(false)}
                         >
                             Cancel
                         </button>

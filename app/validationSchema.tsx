@@ -1,4 +1,4 @@
-import z from '@/node_modules/zod/v4/classic/external.cjs';
+import z from 'zod';
 
 export const schema = z.object({
     title: z.string().min(1, 'Title is required').max(200),
@@ -11,5 +11,6 @@ export const patchIssueScheme = z.object({
     .min(1,'Assigned To User ID is required')
     .max(255)
     .optional()
-    .nullable() 
+    .nullable(),
+    status: z.enum(['OPEN', 'IN_PROGRESS', 'CLOSED']).optional(),
 });

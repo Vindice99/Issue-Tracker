@@ -1,14 +1,9 @@
 "use client";
-import { Issue, IssueStatus, User } from "@prisma/client";
+import { Issue, IssueStatus } from "@prisma/client";
 import axios from "axios";
 import { Select } from "@radix-ui/themes";
-import React, { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import React from "react";
 import toast from "react-hot-toast";
-import Skeleton from "@/app/components/Skeleton";
-import { cacheTag } from "next/dist/server/use-cache/cache-tag";
-import { useSearchParams } from "next/navigation";
-import { useRouter } from "next/router";
 
 const StatusSelect = ({ issue }: { issue: Issue }) => {
   const statuslabels: Record<IssueStatus, string> = {

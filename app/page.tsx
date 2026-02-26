@@ -3,7 +3,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ArrowRightIcon, CheckCircledIcon, RocketIcon } from "@radix-ui/react-icons";
 import LatestIssue from "./LatestIssue";
-import { title } from "process";
 import { Metadata } from "next";
 
 export default function Home() {

@@ -1,4 +1,3 @@
-import { create } from 'domain';
 import { NextRequest, NextResponse } from 'next/server';
 import prisma from '../../../prisma/client';
 import { schema } from '../../validationSchema';
@@ -17,5 +16,8 @@ export async function POST(request: NextRequest) {
             description: validation.data.description,
         }
     });
+    if(!newIssue){
+        return NextResponse.json({error: "Failed to create issue"}, {status: 500});
+    }
     return NextResponse.json({ message: "Issue created successfully" }, { status: 201 });
 }

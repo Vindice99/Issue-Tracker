@@ -1,3 +1,9 @@
-import { Redis } from 'ioredis'
+import { Redis } from "@upstash/redis";
 
-export const redis = new Redis(process.env.REDIS_URL || 'redis://localhost:3000')
+export const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL!,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+})
+
+await redis.set("foo", "bar");
+await redis.get("foo");
