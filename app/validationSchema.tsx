@@ -13,4 +13,5 @@ export const patchIssueScheme = z.object({
     .optional()
     .nullable(),
     status: z.enum(['OPEN', 'IN_PROGRESS', 'CLOSED']).optional(),
+    severity: z.enum(['LOW', 'MEDIUM', 'HIGH', 'CRITICAL']).optional(),
 });

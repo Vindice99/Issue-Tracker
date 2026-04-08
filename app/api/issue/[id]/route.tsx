@@ -23,7 +23,7 @@ export async function PATCH(
     });
   }
   //Destructure validated fields
-  const {assignedToUserId, title, description, status} = validation.data;
+  const {assignedToUserId, title, description, status, severity} = validation.data;
   //Fetch and validate assigned user
   if(assignedToUserId)
   {
@@ -56,6 +56,7 @@ export async function PATCH(
       description,
       assignedToUserId,
       status,
+      severity,
     },
   });
 

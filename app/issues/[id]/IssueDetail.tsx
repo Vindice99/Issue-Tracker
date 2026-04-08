@@ -13,6 +13,7 @@ interface IssueDetailProps {
     title: string;
     description: string;
     status: IssueStatus;
+    severity: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
     createdAt: Date;
     updateAt: Date;
     assignedToUserId: string | null;
@@ -65,6 +66,10 @@ const IssueDetail = ({ detailIssue }: IssueDetailProps) => {
           <div>
             <Text size="1" weight="bold" className='text-gray-500 uppercase'>Status</Text>
             <Text size="2" className='block mt-1'>{detailIssue.status.replace('_', ' ')}</Text>
+          </div>
+          <div>
+            <Text size="1" weight="bold" className='text-gray-500 uppercase'>Severity</Text>
+            <Text size="2" className='block mt-1'>{detailIssue.severity}</Text>
           </div>
           <div>
             <Text size="1" weight="bold" className='text-gray-500 uppercase'>Last Updated</Text>

@@ -3,14 +3,13 @@ import { Box, Flex, Grid } from "@radix-ui/themes";
 import { notFound } from "next/navigation";
 import EditIssueButton from "./EditIssueButton";
 import IssueDetail from "./IssueDetail";
-import { DropdownMenu } from "@radix-ui/themes";
-import Link from "next/link";
 import DeleteButton from "../_components/DeleteButton";
 import { auth } from "@/auth";
 import AsigneeSelect from "./AsigneeSelect";
 import StatusSelect from "./StatusSelect";
 import { cache } from "react";
 import Comments from "./Comments";
+import MoreActionsMenu from "./MoreActionsMenu";
 
 interface IssueDetailPageProps {
   params: Promise<{
@@ -67,25 +66,10 @@ const IssueDetailPage = async ({ params }: IssueDetailPageProps) => {
           <Flex direction="column" gap="4">
             <EditIssueButton id={detailIssue.id} />
             <DeleteButton id={detailIssue.id} />
-            <DropdownMenu.Root>
-              <DropdownMenu.Trigger>
-                <button className="cursor-pointer rounded-md bg-gray-200 px-4 py-2 text-sm font-medium hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600">
-                  More Actions
-                </button>
-              </DropdownMenu.Trigger>
-              <DropdownMenu.Content>
-                <DropdownMenu.Item>
-                  <Link href={`/issues/${detailIssue.id}/edit`}>
-                    Assign to User
-                  </Link>
-                </DropdownMenu.Item>
-                <DropdownMenu.Separator />
-                <DropdownMenu.Item>Change Severity</DropdownMenu.Item>
-                <DropdownMenu.Item>Change Status</DropdownMenu.Item>
-                <DropdownMenu.Separator />
-                <DropdownMenu.Item color="red">Delete Issue</DropdownMenu.Item>
-              </DropdownMenu.Content>
-            </DropdownMenu.Root>
+            <MoreActionsMenu
+              issueId={detailIssue.id}
+              currentSeverity={detailIssue.severity}
+            />
             <StatusSelect issue={detailIssue} />
             <AsigneeSelect issue={detailIssue} />
           </Flex>

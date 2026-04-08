@@ -17,6 +17,7 @@ model Issue {
   title            String
   description      String
   status           IssueStatus @default(OPEN)
+  severity         IssueSeverity @default(MEDIUM)
   assignedToUserId String?     @db.VarChar(255)
   assignedToUser   User?       @relation(fields: [assignedToUserId], references: [id], onDelete: SetNull)
   comments         Comment[]
@@ -116,5 +117,12 @@ enum IssueStatus {
   OPEN
   IN_PROGRESS
   CLOSED
+}
+
+enum IssueSeverity {
+  LOW
+  MEDIUM
+  HIGH
+  CRITICAL
 }
   
