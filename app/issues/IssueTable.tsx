@@ -8,13 +8,16 @@ import prisma from "@/prisma/client"
 
 
 const IssueTable = async ({ 
+  issues,
   searchParams 
 }: { 
-  searchParams: Promise<{ 
+  issues: Issue[];
+  searchParams: { 
     status?: IssueStatus; 
     orderBy?: keyof Issue;
     page?: string;
     pageSize?: string;
+    q?: string;
   }> 
 }) => {
 
@@ -24,30 +27,18 @@ const IssueTable = async ({
     {label: 'Created', value: 'createdAt', className: 'hidden md:table-cell'},
   ] 
 
-  const params = await searchParams;
   const statuses = Object.values(IssueStatus);
   
   // Validate the status and orderBy
-  const status = statuses.includes(params.status!) ? params.status : undefined;
-  const where = {status}
+  const status = statuses.includes(searchParams.status!) ? searchParams.status : undefined;
   
   const validOrderBy = ['title', 'status', 'createdAt'] as const;
-  const orderBy = validOrderBy.includes(params.orderBy as typeof validOrderBy[number]) 
-    ? params.orderBy 
+  const orderBy = validOrderBy.includes(searchParams.orderBy as typeof validOrderBy[number]) 
+    ? searchParams.orderBy 
     : 'createdAt';
-  
-  const page = parseInt(params.page || '1', 10);
-  const pageSize = parseInt(params.pageSize || '10', 10);
-
-  // Fetch issues with dynamic sorting
-  const issues = await prisma.issue.findMany({
-    where,
-    orderBy: { [orderBy!]: 'asc' },
-    skip: (page - 1) * pageSize,
-    take: pageSize,
-  });
 
   const users = await prisma.user.findMany();
+  const isSearching = Boolean(searchParams.q?.trim());
  
   return (
     <Table.Root variant="surface" className="w-full">
@@ -58,18 +49,26 @@ const IssueTable = async ({
                 key={column.value} 
                 className={`w-1/4 ${column.className || ''}`}
               >
-                <NextLink 
-                  href={{
-                    query: { 
-                      ...(status && { status }), 
-                      orderBy: column.value 
-                    }
-                  }}
-                  className="flex items-center gap-1 hover:underline"
-                >
-                  {column.label}
-                  {column.value === orderBy && <ArrowUpIcon className="inline" />}
-                </NextLink>
+                {isSearching ? (
+                  column.label
+                ) : (
+                  <NextLink 
+                    href={{
+                      pathname: "/issues",
+                      query: { 
+                        ...(status && { status }), 
+                        ...(searchParams.page && { page: searchParams.page }),
+                        ...(searchParams.pageSize && { pageSize: searchParams.pageSize }),
+                        ...(searchParams.q && { q: searchParams.q }),
+                        orderBy: column.value 
+                      }
+                    }}
+                    className="flex items-center gap-1 hover:underline"
+                  >
+                    {column.label}
+                    {column.value === orderBy && <ArrowUpIcon className="inline" />}
+                  </NextLink>
+                )}
               </Table.ColumnHeaderCell>
             ))}
             <Table.ColumnHeaderCell className="hidden md:table-cell w-1/4">

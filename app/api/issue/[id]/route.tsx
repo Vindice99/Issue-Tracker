@@ -2,6 +2,7 @@ import { patchIssueScheme } from "@/app/validationSchema";
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/prisma/client";
 import { auth } from "@/auth";
+import { removeIssueFromAlgolia, syncIssueToAlgolia } from "@/lib/algolia";
 
 export async function PATCH(
   request: NextRequest,
@@ -60,6 +61,8 @@ export async function PATCH(
     },
   });
 
+  await syncIssueToAlgolia(updatedIssue);
+
   return NextResponse.json(updatedIssue);
 }
 
@@ -86,6 +89,8 @@ export async function DELETE(
   const deletedIssue = await prisma.issue.delete({
     where: {id : issue.id},
   });
+
+  await removeIssueFromAlgolia(deletedIssue.id);
 
   return NextResponse.json(deletedIssue);
 }

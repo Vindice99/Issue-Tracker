@@ -38,6 +38,7 @@ Live features include role-based access, real-time status updates, commenting, a
 | Markdown | SimpleMDE editor + React Markdown renderer |
 | Caching | Redis (Upstash) |
 | Rate Limiting | Upstash Ratelimit + Redis |
+| Search | Algolia |
 | Error Monitoring | Sentry |
 | Containerization | Docker + Docker Compose |
 | Fonts | Geist Sans and Geist Mono |
@@ -79,6 +80,11 @@ Live features include role-based access, real-time status updates, commenting, a
 - Sort by column (title, status, created date) by clicking column headers.
 - Pagination with first/prev/next/last navigation.
 - Configurable page size selector.
+
+### Issue Search
+- Search issues by title from the issues list page.
+- Issue create, update, and delete operations sync the Algolia index automatically.
+- Search falls back to database title matching when Algolia is not configured.
 
 ### Authentication and Authorization
 - Google OAuth 2.0 with automatic token refresh for long-lived sessions.
@@ -211,6 +217,11 @@ AUTH_RESEND_KEY=your-resend-api-key
 
 # Redis (Upstash)
 REDIS_URL=your-redis-url
+
+# Algolia
+ALGOLIA_APP_ID=your-algolia-app-id
+ALGOLIA_ADMIN_API_KEY=your-algolia-admin-api-key
+ALGOLIA_ISSUE_INDEX_NAME=issues
 
 # Sentry (optional)
 SENTRY_DSN=your-sentry-dsn

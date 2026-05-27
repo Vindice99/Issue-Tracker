@@ -1,11 +1,11 @@
 import { AddIssueButton } from "@/app/components";
 import IssueStatusFilter from "@/app/issues/IssueStatusFilter";
-import prisma from "@/prisma/client";
-import { Issue, IssueStatus } from "@prisma/client";
 import { Container, Flex } from "@radix-ui/themes";
 import Pagination from "../components/Pagination";
 import IssueTable from "./IssueTable";
 import PageSizeSelector from "./PageSizeSelector";
+import IssueSearchInput from "./IssueSearchInput";
+import { getIssueList, type IssueListQuery } from "@/lib/algolia";
 
 //issueCount is the total number of issues matching the current filter
 //where clause is built based on the status filter
@@ -13,21 +13,12 @@ import PageSizeSelector from "./PageSizeSelector";
 const IssuePage = async ({
   searchParams,
 }: {
-  searchParams: Promise<{
-    status?: IssueStatus;
-    orderBy?: keyof Issue;
-    page?: string;
-    pageSize?: string;
-  }>;
+  searchParams: Promise<IssueListQuery>;
 }) => {
   const params = await searchParams;
-  const statuses = Object.values(IssueStatus);
-  const status = statuses.includes(params.status!) ? params.status : undefined;
+  const { issues, issueCount } = await getIssueList(params);
   const page = parseInt(params.page || "1", 10);
   const pageSize = parseInt(params.pageSize || "10", 10);
-  const where = { status };
-
-  const issueCount = await prisma.issue.count({ where });
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-indigo-950 dark:to-purple-950">
@@ -36,16 +27,17 @@ const IssuePage = async ({
       <Container className="relative p-6 max-w-full">
         <div className="backdrop-blur-sm bg-white/70 dark:bg-gray-800/70 rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/20 p-6 mb-6">
           <Flex className="flex-wrap gap-3" justify="between" align="center">
-            <div className="flex gap-3 flex-wrap">
+            <div className="flex gap-3 flex-wrap items-center">
               <AddIssueButton />
               <IssueStatusFilter />
+              <IssueSearchInput />
             </div>
             <PageSizeSelector />
           </Flex>
         </div>
         
         <div className="backdrop-blur-sm bg-white/70 dark:bg-gray-800/70 rounded-2xl shadow-xl border border-white/20 dark:border-gray-700/20 overflow-hidden mb-6">
-          <IssueTable searchParams={searchParams} />
+          <IssueTable issues={issues} searchParams={params} />
         </div>
         
         <Pagination
