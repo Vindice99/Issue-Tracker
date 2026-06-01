@@ -7,6 +7,7 @@ import { ThemeProvider } from "./components/ThemeProvider";
 import AuthSession from "./auth/Provider";
 import QueryClientProvider from "./QueryClientProvider";
 import { Toaster } from "react-hot-toast";
+import { CommandPalette } from "./components/CommandPalette";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -39,6 +40,7 @@ export default function RootLayout({
             <main>
               {children}
             </main>
+            <CommandPalette />
             <Toaster />
             {/* <ThemePanel /> */}
           </Theme>

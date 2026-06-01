@@ -18,7 +18,7 @@ const IssueTable = async ({
     page?: string;
     pageSize?: string;
     q?: string;
-  }> 
+  }
 }) => {
 
   const columns: { label: string; value: keyof Issue; className?: string }[] = [

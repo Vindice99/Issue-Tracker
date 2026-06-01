@@ -38,10 +38,11 @@ const NavLink = () => {
 
   const links = [
     { label: "Dashboard", href: "/dashboard" },
-    { label: "Issue", href: "/issues" },
+    { label: "Issues", href: "/issues" },
+    { label: "Board", href: "/board" },
   ];
   return (
-    <ul className="flex hover:cursor-pointer ">
+    <ul className="flex hover:cursor-pointer gap-6">
       {links.map((link) => (
         <li key={link.href} >
           <Link
